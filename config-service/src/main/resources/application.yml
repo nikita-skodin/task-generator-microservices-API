@@ -11,3 +11,7 @@ spring:
     active: native
   application:
     name: CONFIG
+  security:
+    user:
+      name: username
+      password: password
