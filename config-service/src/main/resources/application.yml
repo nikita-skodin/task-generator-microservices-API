@@ -5,8 +5,10 @@ spring:
   cloud:
     config:
       server:
-        native:
-          search-locations: classpath:/config
+        git:
+          username: skodin36@gmail.com
+          password: 22087622Ns
+          uri: https://github.com/nikita-skodin/microservice-architecture-spring-cloud-beta-4-config-storage
   profiles:
     active: native
   application:
