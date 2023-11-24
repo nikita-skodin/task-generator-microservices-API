@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: MATH
+  config:
+    import: configserver:http://localhost:8765/config
+  cloud:
+    config:
+      fail-fast: true
