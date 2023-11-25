@@ -36,7 +36,11 @@ public class ExamService {
     }
 
     private String getURL(Map.Entry<String, Integer> map) {
-        String string = "http://" + map.getKey() + "/api/questions?amount=" + map.getValue();
+        String serverName = map.getKey().toLowerCase();
+
+        String string = "http://" + serverName +
+                "/api/" + serverName + "/questions?amount=" + map.getValue();
+
         System.err.println(string);
         return string;
     }

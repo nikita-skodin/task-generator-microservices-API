@@ -9,13 +9,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/history")
 public class HistoryController {
 
     private final QuestionService questionService;
 
     @GetMapping("/questions")
     public List<Question> getQuestions(@RequestParam Integer amount){
+        amount = Math.abs(amount);
         return questionService.getQuestions(amount);
     }
 

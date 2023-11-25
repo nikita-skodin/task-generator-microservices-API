@@ -13,13 +13,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/math")
 public class MathController {
 
     private final QuestionService questionService;
 
     @GetMapping("/questions")
     public List<Question> getQuestions(@RequestParam Integer amount){
+        amount = Math.abs(amount);
         return questionService.getQuestions(amount);
     }
 
