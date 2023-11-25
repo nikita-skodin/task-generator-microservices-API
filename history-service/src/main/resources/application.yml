@@ -1,8 +1,8 @@
 spring:
   application:
-    name: MATH
+    name: HISTORY
   config:
-    import: configserver:http://localhost:8765/config
+    import: configserver:http://localhost:8888
   cloud:
     config:
       username: username

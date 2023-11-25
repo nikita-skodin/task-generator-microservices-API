@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: EUREKA
+  config:
+    import: configserver:http://localhost:8888
+  cloud:
+    config:
+      username: username
+      password: password
+      fail-fast: true
