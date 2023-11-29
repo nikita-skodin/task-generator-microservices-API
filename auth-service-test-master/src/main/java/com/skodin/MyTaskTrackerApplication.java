@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.info.Info;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,12 +30,13 @@ import java.util.Properties;
 @EnableMethodSecurity
 @SpringBootApplication
 @RequiredArgsConstructor
-public class AuthApplication {
+public class MyTaskTrackerApplication {
 
     private final UserService userService;
     private final MailProperties mailProperties;
+
     public static void main(String[] args) {
-        SpringApplication.run(AuthApplication.class, args);
+        SpringApplication.run(MyTaskTrackerApplication.class, args);
     }
 
     @Bean

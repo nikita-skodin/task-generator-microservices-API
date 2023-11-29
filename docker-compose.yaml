@@ -9,4 +9,4 @@ services:
     environment:
       - 'POSTGRES_USER=nikita'
       - 'POSTGRES_PASSWORD=nikita'
-      - 'POSTGRES_DB=my-db'
+      - 'POSTGRES_DB=db'
