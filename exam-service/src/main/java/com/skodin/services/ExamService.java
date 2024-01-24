@@ -8,6 +8,7 @@ import com.skodin.repository.ExamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -22,6 +23,7 @@ public class ExamService {
     private final RestTemplate restTemplate;
     private final ExamRepository examRepository;
 
+    @Transactional
     public Exam createExam(String examName, Map<String, Integer> params) {
 
         List<Section> list = params.entrySet()
@@ -36,6 +38,12 @@ public class ExamService {
         log.info("Exam successfully created");
 
         return examRepository.save(exam);
+    }
+
+    @Transactional(readOnly = true)
+    public Exam getById(String id){
+        return examRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Exam  with id %s is not found".formatted(id)));
     }
 
     private Question[] createRequest(String url) {

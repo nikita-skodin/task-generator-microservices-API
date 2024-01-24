@@ -7,6 +7,8 @@ import com.skodin.models.Exam;
 import com.skodin.services.ExamService;
 import com.skodin.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -54,11 +56,11 @@ public class ExamController extends ParentController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorDTO.class)
                     )),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(
+                    @ApiResponse(responseCode = "401", description = "Unauthorized, token is invalid", content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorDTO.class)
                     )),
-                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(
+                    @ApiResponse(responseCode = "403", description = "Forbidden, there are no suitable roles", content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorDTO.class)
                     )),
@@ -73,7 +75,7 @@ public class ExamController extends ParentController {
                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String header) {
 
         if (!userService.isTeacher(header)) {
-            throw new AccessDeniedException("Admin roles has not been found");
+            throw new AccessDeniedException("Teacher roles has not been found");
         }
 
         log.info("Request map is: {}", request.getParams());
@@ -81,6 +83,54 @@ public class ExamController extends ParentController {
 
         return ResponseEntity
                 .created(URI.create("%s/api/exam/%s".formatted(baseUrl, exam.getId())))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(exam);
+    }
+
+    @Operation(
+            summary = "Get Exam by id",
+            description = "Get Exam by id",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "exam`s id",
+                            in = ParameterIn.QUERY,
+                            schema = @Schema(type = "String"))},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully", content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Exam.class)
+                    )),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized, invalid token", content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDTO.class)
+                    )),
+                    @ApiResponse(responseCode = "404", description = "Exam with such id is Not Found", content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDTO.class)
+                    )),
+                    @ApiResponse(responseCode = "503", description = "Service unavailable", content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDTO.class)
+                    ))
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<Exam> getExamById(@PathVariable("id") String id,
+                                            @RequestHeader(HttpHeaders.AUTHORIZATION) String header) {
+
+        if (!userService.isStudent(header) && !userService.isTeacher(header)){
+                throw new AccessDeniedException("No roles has been found");
+        }
+
+        Exam exam = examService.getById(id);
+
+        if (userService.isStudent(header)) {
+            exam.getSections().forEach(section -> section.getQuestions().forEach(question -> question.setAnswer("?")));
+        }
+
+        return ResponseEntity
+                .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(exam);
     }
