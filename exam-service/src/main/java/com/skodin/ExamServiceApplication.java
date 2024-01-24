@@ -15,7 +15,7 @@ public class ExamServiceApplication {
     }
 
     @Bean
-    @LoadBalanced // без него не работает разобраться почему
+    @LoadBalanced
     public RestTemplate restTemplate (RestTemplateBuilder restTemplateBuilder){
         return restTemplateBuilder.build();
     }

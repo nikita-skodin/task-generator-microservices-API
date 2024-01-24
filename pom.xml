@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.skodin</groupId>
-    <artifactId>microservice-architecture-spring-cloud-beta-4</artifactId>
+    <artifactId>task-generator-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>microservice-architecture-spring-cloud-beta-4</name>
     <description>microservice-architecture-spring-cloud-beta-4</description>

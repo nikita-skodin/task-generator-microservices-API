@@ -8,3 +8,8 @@ spring:
       username: username
       password: password
       fail-fast: true
+
+eureka:
+  server:
+    enable-self-preservation: false
+    expected-client-renewal-interval-seconds: 10

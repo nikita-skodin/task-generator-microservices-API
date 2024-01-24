@@ -8,3 +8,10 @@ spring:
       username: username
       password: password
       fail-fast: true
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mongoDB
+
+url:
+  root: http://localhost:8765

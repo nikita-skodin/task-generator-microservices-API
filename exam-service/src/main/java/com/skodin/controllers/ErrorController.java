@@ -1,7 +1,9 @@
 package com.skodin.controllers;
 
-import com.skodin.DTO.ErrorDTO;
+import com.skodin.dtos.ErrorDTO;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +13,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Map;
 
-@Controller
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Controller
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 
     private static final String PATH = "/error";
@@ -27,10 +30,13 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
                 ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE)
         );
 
-        System.err.println(attributes.get("status"));
-
         return ResponseEntity
                 .status((Integer) attributes.get("status"))
-                .body(new ErrorDTO((String) attributes.get("error"), (String) attributes.get("message")));
+                .body(ErrorDTO
+                        .builder()
+                        .error((String) attributes.get("error"))
+                        .message((String) attributes.get("message"))
+                        .build()
+                );
     }
 }

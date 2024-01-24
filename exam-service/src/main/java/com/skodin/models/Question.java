@@ -1,13 +1,18 @@
 package com.skodin.models;
 
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@ToString
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Question {
 
-    private final String question;
-    private final String answer;
+    @Schema(name = "question", example = "3 + 2 = ?")
+    private String question;
 
+    @Schema(name = "answer", example = "5")
+    private String answer;
 }
