@@ -1,8 +1,0 @@
-.idea
-target
-TT.txt
-HELP.md
-my-task-tracker.iml
-.env
-src/main/resources/application-nikita.yml
-src/main/resources/application-nikita-docker.yml
