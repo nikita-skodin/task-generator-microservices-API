@@ -6,8 +6,8 @@ spring:
     config:
       server:
         git:
-          username:
-          password:
+          username: skodin36@gmail.com
+          password: 22087622Ns
           uri: https://github.com/nikita-skodin/microservice-architecture-spring-cloud-beta-4-config-storage
 
   application:
