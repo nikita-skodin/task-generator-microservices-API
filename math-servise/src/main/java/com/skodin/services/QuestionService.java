@@ -30,7 +30,7 @@ public class QuestionService {
         int b = random.nextInt(11);
 
         return new Question(
-                a + " + " + b + " = " + (a + b),
+                a + " + " + b + " = ?",
                 String.valueOf(a + b)
         );
     }

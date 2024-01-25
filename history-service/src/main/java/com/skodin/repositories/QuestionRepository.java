@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    @Query(value = "SELECT * FROM question OFFSET floor(random() * (SELECT COUNT(*) FROM question)) LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM questions.questions OFFSET floor(random() * (SELECT COUNT(*) FROM questions.questions)) LIMIT 1", nativeQuery = true)
     Question findRandom();
 
 }
