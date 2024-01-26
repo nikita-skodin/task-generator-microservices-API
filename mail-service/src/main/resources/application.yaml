@@ -1,0 +1,30 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: MAIL
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: task.tracker.info1@gmail.com
+    password: xtyq tsbl ucyp rcsn
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  rabbitmq:
+    port: 5672
+    host: localhost
+    username: guest
+    password: guest
+
+custom:
+  rabbit:
+    first-queue: activation-mail-queue
+    exchange: mail-exchange
+    routing: send.activation-mail

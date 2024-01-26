@@ -1,53 +1,41 @@
 package com.skodin.reactiveauthservice.util;
 
-import jakarta.mail.BodyPart;
-import jakarta.mail.Message;
-import jakarta.mail.internet.MimeBodyPart;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skodin.reactiveauthservice.dtos.SendMessageDto;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-
-import java.util.Map;
 
 @Log4j2
 @Component
 @RequiredArgsConstructor
 public class MailSandler {
 
-    private final JavaMailSender mailSender;
-    private final TemplateEngine templateEngine;
+    private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
 
+    @Value("${custom.rabbit.exchange}")
+    private String exchange;
 
-    @Async
+    @Value("${custom.rabbit.routing}")
+    private String baseRouting;
+
+    @SneakyThrows
     public void sendActivationCodeMessage(String to, String subject, String link, String userName) {
-        try {
-            MimeMessage message = mailSender.createMimeMessage();
-            Context context = new Context();
 
-            context.setVariables(Map.of("name", userName, "url", link));
-            String text = templateEngine.process("emailTemplate", context);
+        MessageProperties messageProperties = new MessageProperties();
+        messageProperties.setContentType("application/json");
 
-            MimeMultipart mimeMultipart = new MimeMultipart("html");
-            BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setContent(text, "text/html");
-            mimeMultipart.addBodyPart(messageBodyPart);
+        SendMessageDto sendMessageDto = new SendMessageDto(to, subject, link, userName);
 
-            message.setContent(mimeMultipart);
-            message.setSubject(subject);
-            message.setRecipients(Message.RecipientType.TO, to);
+        Message message = new Message(objectMapper.writeValueAsString(sendMessageDto).getBytes(), messageProperties);
 
-            mailSender.send(message);
-            log.info("Activation link has been send, {}", link);
-        } catch (Exception exception) {
-            throw new RuntimeException(exception.getMessage());
-        }
-
+        rabbitTemplate.send(exchange, baseRouting, message);
     }
 
 }
